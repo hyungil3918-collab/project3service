@@ -328,8 +328,8 @@ def binary_model(df, target):
         plt.subplot(6, 2, count)
         cm = confusion_matrix(y_test, t_pred) 
         sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', 
-                    xticklabels=['Fault (0)', 'Normal (1)'], 
-                    yticklabels=['Fault (0)', 'Normal (1)'])
+                    xticklabels=['Normal (0)', 'Fault (1)'], 
+                    yticklabels=['Normal (0)', 'Fault (1)'])
         plt.title('Confusion Matrix:'+t_name)
         plt.xlabel('Predicted')
         plt.ylabel('Actual')      
