@@ -114,7 +114,7 @@ def hist_pro(df_number):
         plt.hist(df_number[col], color='#2563eb', edgecolor='black')
 
         # (선택 사항) 계산해둔 평균과 3-Sigma(UCL, LCL) 수직선 추가
-        plt.axvline(t_mean, color='yellow', linestyle='--', linewidth=1, label='Mean')
+        plt.axvline(t_mean, color='red', linestyle='-', linewidth=1, label='Mean')
         plt.axvline(t_ucl, color='red', linestyle=':', linewidth=1, label='UCL')
         plt.axvline(t_lcl, color='red', linestyle=':', linewidth=1, label='LCL')
 
