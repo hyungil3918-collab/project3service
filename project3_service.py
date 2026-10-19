@@ -111,12 +111,12 @@ def hist_pro(df_number):
         plt.title(titlename, fontsize=8, color=titlecolor)
 
         # 히스토그램 그리기
-        plt.hist(df_number[col], color='skyblue', edgecolor='black')
+        plt.hist(df_number[col], color='#2563eb', edgecolor='black')
 
         # (선택 사항) 계산해둔 평균과 3-Sigma(UCL, LCL) 수직선 추가
-        plt.axvline(t_mean, color='red', linestyle='--', linewidth=1, label='Mean')
-        plt.axvline(t_ucl, color='orange', linestyle=':', linewidth=1, label='UCL')
-        plt.axvline(t_lcl, color='orange', linestyle=':', linewidth=1, label='LCL')
+        plt.axvline(t_mean, color='yellow', linestyle='--', linewidth=1, label='Mean')
+        plt.axvline(t_ucl, color='red', linestyle=':', linewidth=1, label='UCL')
+        plt.axvline(t_lcl, color='red', linestyle=':', linewidth=1, label='LCL')
 
     plt.tight_layout()
     return fig
