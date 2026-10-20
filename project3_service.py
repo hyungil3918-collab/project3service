@@ -655,3 +655,56 @@ def linear_predict(df, target, sigma):
     df_anormal = df_result[df_result['Is_Outlier'] == 0]
 
     return df_anormal
+
+
+# %%
+# ===================== [추가] 4번 탭: Target과 상관분석 =====================
+def _corr_feature_columns(df, target):
+    """상관분석 후보 변수: 숫자형 컬럼 중 공정 후 계측값 / target / 라벨 제외"""
+    excluded = {'POST THK AVG', 'POST PC',
+                'Depo_THK', 'Particle', 'Depo_THK_y', 'Particle_y'}
+    cols = [c for c in df.select_dtypes(include='number').columns if c not in excluded]
+    if target in cols:
+        cols.remove(target)
+    return cols
+
+
+def correlation_analysis(df, target, method='pearson', top_n=10):
+    """target과의 상관계수를 절댓값 순으로 정렬해 상위 top_n개를 막대그래프로 표시"""
+    candidate_cols = _corr_feature_columns(df, target)
+    work = df[candidate_cols + [target]].copy()
+    corr = work.corr(method=method)[target].drop(target).dropna()
+    ranked = corr.reindex(corr.abs().sort_values(ascending=False).index).head(top_n)
+
+    result = pd.DataFrame({
+        '변수': ranked.index,
+        '상관계수': ranked.values,
+        '절대 상관계수': ranked.abs().values,
+    })
+
+    fig, ax = plt.subplots(figsize=(9, max(4, 0.45 * len(result))))
+    order = result.sort_values('절대 상관계수', ascending=True)
+    ax.barh(order['변수'], order['상관계수'])
+    ax.axvline(0, linewidth=1)
+    ax.set_title(f'{target}과의 {method.title()} 상관계수 상위 {len(result)}개')
+    ax.set_xlabel('상관계수')
+    plt.tight_layout()
+    return fig, result
+
+
+def scatter_top_features(df, target, features):
+    """상관계수 상위 변수(최대 3개)와 target의 산점도"""
+    features = features[:3]
+    if not features:
+        return None
+    fig, axes = plt.subplots(1, len(features), figsize=(5 * len(features), 4))
+    if len(features) == 1:
+        axes = [axes]
+    for ax, feat in zip(axes, features):
+        ax.scatter(df[feat], df[target], alpha=0.45, s=14)
+        ax.set_xlabel(feat)
+        ax.set_ylabel(target)
+        ax.set_title(f'{feat} vs {target}')
+        ax.grid(alpha=0.25)
+    plt.tight_layout()
+    return fig
