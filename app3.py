@@ -195,7 +195,7 @@ def main():
         head_df = pd.DataFrame([list(head_01)], columns=["Accuracy","Precision","Recall","F1-Score"])    
                
         st.dataframe(head_df)        
-        fig, results = ai.binary_model(df_ai, target)         
+        fig, results = run_binary_model(target)         
         st.dataframe(results)
         st.pyplot(fig)
          
@@ -215,7 +215,7 @@ def main():
          # escape=False 설정을 해주어야 <br> 태그가 깨지지 않고 줄바꿈으로 작동합니다.
          st.markdown('###### '+head_df.to_html(escape=False, index=False), unsafe_allow_html=True)
          
-         fig, results = ai.linear_model(df_ai,target)         
+         fig, results = run_linear_model(target)         
          st.dataframe(results)
          st.pyplot(fig)
          
