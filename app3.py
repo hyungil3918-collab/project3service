@@ -54,7 +54,7 @@ def run_binary_model(target):
 
 @st.cache_resource(show_spinner="회귀 모델 학습 중... (Target별 최초 1회만)")
 def run_linear_model(target):
-    return ai.linear_model(df_ai, target
+    return ai.linear_model(df_ai, target)
 
 # 데이터 가져오기 (이미 로드되었다면 0.1초만에 리턴됨)
 
