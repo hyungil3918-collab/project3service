@@ -156,13 +156,26 @@ def main():
          st.pyplot(fig)     
          
         
-    elif menu == menus[3]:  
+    elif menu == menus[3]:
         st.session_state.clear()
-        df = df_ai.select_dtypes(include='number')
-        target = st.radio("Target을 선택 하세요:", ['Depo_THK','Particle'], horizontal=True,index=0)
-        fig, results = ai.corr_pro(df_ai, target)
-        # st.dataframe(results)
+        st.title("Target과 공정 변수 상관분석")
+        target = st.radio("Target을 선택 하세요:", ['Depo_THK', 'Particle'], horizontal=True, index=0)
+        method = st.radio("상관분석 방법을 선택하세요", ["pearson", "spearman"], horizontal=True,
+                          format_func=lambda x: "Pearson(선형 관계)" if x == "pearson" else "Spearman(순위 기반 관계)")
+        top_n = st.slider("상관계수 상위 변수 개수", 5, 20, 10)
+
+        fig, corr_df = ai.correlation_analysis(df_ai, target, method, top_n)
         st.pyplot(fig)
+        plt.close(fig)
+        st.dataframe(corr_df, use_container_width=True, hide_index=True)
+
+        top_features = corr_df["변수"].head(3).tolist()
+        scatter_fig = ai.scatter_top_features(df_ai, target, top_features)
+        if scatter_fig is not None:
+            st.pyplot(scatter_fig)
+            plt.close(scatter_fig)
+
+        st.caption("Pearson은 선형 관계, Spearman은 순위 기반 단조 관계를 봅니다.")
   
     elif menu == menus[4]: 
         st.session_state.clear()
